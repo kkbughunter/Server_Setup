@@ -305,6 +305,33 @@ You should see all 5 services up:
 
 ---
 
-If you want, I can also give **ready-to-copy firewall commands** to safely allow access only to needed ports from your laptop.
+---
 
-Do you want me to do that next?
+### **Option 1: Remove existing Dockerfile and clone**
+
+```bash
+rm Dockerfile
+git clone https://github.com/AstravalSmart/iotroot.git .
+```
+
+> ✅ This will bring all repo files including Dockerfile if it exists in repo.
+
+---
+
+### **Option 2: Clone into a temporary folder, then merge**
+
+```bash
+cd /home/deploy/iot-stack
+git clone https://github.com/AstravalSmart/iotroot.git springboot_tmp
+cp -r springboot_tmp/* springboot/
+rm -rf springboot_tmp
+```
+
+> Use this if you want to **keep your current Dockerfile** and merge manually.
+
+---
+
+Since you already have a Dockerfile in the folder, **Option 2 is safer**.
+
+Do you want me to give the **final Dockerfile for Spring Boot** after cloning?
+
