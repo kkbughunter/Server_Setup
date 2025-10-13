@@ -26,6 +26,49 @@ sudo usermod -aG docker deploy
 ```bash
 ssh-copy-id deploy@your_server_ip
 ```
+Yes, you can generate an SSH key pair without a passphrase. This is common for automation or when you prefer not to enter a passphrase each time you use the key. Here's how to do it:
+
+---
+
+### ✅ Generate SSH Key Pair Without Passphrase
+
+Run the following command:
+
+```bash
+ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ''
+```
+
+* `-t rsa`: Specifies the RSA algorithm.
+* `-b 4096`: Sets the key length to 4096 bits for enhanced security.
+* `-f ~/.ssh/id_rsa`: Defines the file path to save the private key.
+* `-N ''`: Sets an empty passphrase (no passphrase).
+
+This command will generate the key pair without prompting for a passphrase.
+
+---
+
+### 🔐 Is It Safe to Use a Key Without a Passphrase?
+
+Using a key without a passphrase is acceptable in certain scenarios:
+
+* **Automation**: For scripts or services that require SSH access without manual intervention.
+* **Controlled Environments**: When the private key is stored securely and access is restricted.
+
+However, be aware that if someone gains access to your private key file, they can authenticate as you without any additional security layer. Therefore, ensure the private key file is properly secured with appropriate file permissions and access controls.
+
+---
+
+### 📁 Verify the Generated Keys
+
+After running the command, verify that the keys were created:
+
+```bash
+ls -l ~/.ssh/id_rsa ~/.ssh/id_rsa.pub
+```
+
+You should see both the private (`id_rsa`) and public (`id_rsa.pub`) key files listed.
+
+
 ### 5. (Optional) Disable password login (only allow SSH key) — edit /etc/ssh/sshd_config
  - Set PasswordAuthentication no
  - Ensure PubkeyAuthentication yes
