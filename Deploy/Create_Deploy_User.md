@@ -53,8 +53,7 @@ Using a key without a passphrase is acceptable in certain scenarios:
 
 * **Automation**: For scripts or services that require SSH access without manual intervention.
 * **Controlled Environments**: When the private key is stored securely and access is restricted.
-
-However, be aware that if someone gains access to your private key file, they can authenticate as you without any additional security layer. Therefore, ensure the private key file is properly secured with appropriate file permissions and access controls.
+<img width="774" height="443" alt="image" src="https://github.com/user-attachments/assets/b97c9bb1-6eac-4ede-9c50-89a208f73138" />
 
 ---
 
