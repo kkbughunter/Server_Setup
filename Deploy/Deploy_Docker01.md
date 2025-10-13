@@ -281,7 +281,7 @@ Save and exit.
 ## 6️⃣ Build and run the stack
 
 ```bash
-docker-compose up -d --build
+docker compose up -d --build
 ```
 
 * `-d` → run in detached mode
