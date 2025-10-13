@@ -50,6 +50,7 @@ docker --version
 ```bash
 sudo systemctl enable docker
 ```
+<img width="656" height="94" alt="Screenshot 2025-10-13 at 7 20 26 PM" src="https://github.com/user-attachments/assets/68ad2690-8081-4007-a1fa-b8f64f5b8734" />
 
 ### Optional: Run Docker Without Sudo
 
