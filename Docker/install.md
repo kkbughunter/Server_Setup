@@ -46,7 +46,10 @@ Confirm that Docker is running and check the installed version:
 sudo systemctl status docker
 docker --version
 ```
-
+### Auto Start Docker
+```bash
+sudo systemctl enable docker
+```
 
 ### Optional: Run Docker Without Sudo
 
