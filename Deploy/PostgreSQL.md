@@ -9,7 +9,8 @@ cd postgresql
 touch Dockerfile
 nano Dockerfile
 ```
-iot-stack/postgresql/Dockerfile
+
+## iot-stack/postgresql/Dockerfile
 ```
 FROM postgres:15
 
@@ -23,7 +24,8 @@ COPY initdb/ /docker-entrypoint-initdb.d/
 
 EXPOSE 5432
 ```
-iot-stack/docker-compose.yml
+
+## iot-stack/docker-compose.yml
 ```yml
 version: "3.9"
 
