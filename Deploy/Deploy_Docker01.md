@@ -1,82 +1,33 @@
-Next steps are to **set up your IoT stack on the VPS**. Since you’re now in `/home/deploy/iot-stack` as the `deploy` user, here’s the step-by-step plan:
+Here’s a **clean, step-by-step document** based on your previous chats for setting up **VerneMQ in Docker** alongside PostgreSQL in your IoT platform:
 
 ---
 
-## 1️⃣ Create Service Folders
+# Docker VerneMQ Setup for IoT Platform
 
-```bash
-mkdir vernemq postgresql mongodb springboot vite-app backups env
+## 1️⃣ Directory Structure
+
+Your `iot-stack` directory should look like this:
+
 ```
-
-* Each folder will hold the Dockerfile and configs for that service.
-
----
-
-## 2️⃣ Prepare Dockerfiles
-
-We’ll create **separate Dockerfiles** for each service:
-
-| Service     | Notes                                     |
-| ----------- | ----------------------------------------- |
-| VerneMQ     | Use official image, mount config          |
-| PostgreSQL  | Use official image, mount initdb scripts  |
-| MongoDB     | Use official image, mount data volume     |
-| Spring Boot | Custom image, build jar inside Dockerfile |
-| Vite App    | Custom image, serve dev or build version  |
-
----
-Perfect — I’ll give you **exact step-by-step commands** to create all Dockerfiles, volumes, network, and bring up the stack on your VPS.
-
----
-# Let's Start with docker
-## 1️⃣ Go to your stack folder
-
-```bash
-cd /home/deploy/iot-stack
+iot-stack/
+├─ backups/
+├─ docker-compose.yml
+├─ env/
+├─ mongodb/
+├─ postgresql/
+│  ├─ Dockerfile
+│  └─ initdb/
+├─ springboot/
+├─ vernemq/
+│  ├─ Dockerfile
+│  ├─ etc/        <-- Config files will go here
+│  └─ config/
+└─ vite-app/
 ```
 
 ---
 
-## 2️⃣ Create Dockerfiles for each service
-
-### **VerneMQ**
-
-```bash
-cd vernemq
-nano Dockerfile
-```
-
-Paste this inside:
-
-```dockerfile
-FROM vernemq/vernemq:latest
-
-VOLUME ["/vernemq/data", "/vernemq/etc"]
-
-EXPOSE 1883 8080
-
-CMD ["vernemq", "start"]
-```
-
-Save and exit (`Ctrl+O`, `Enter`, `Ctrl+X`).
-
-Go back:
-
-```bash
-cd ..
-```
-
----
-
-### **PostgreSQL**
-
-```bash
-cd postgresql
-mkdir initdb
-nano Dockerfile
-```
-
-Paste:
+## 2️⃣ PostgreSQL Dockerfile (`postgresql/Dockerfile`)
 
 ```dockerfile
 FROM postgres:15
@@ -92,142 +43,58 @@ COPY initdb/ /docker-entrypoint-initdb.d/
 EXPOSE 5432
 ```
 
-Save and exit, then back:
-
-```bash
-cd ..
-```
+* `initdb/` contains SQL scripts to initialize the database.
+* Data is persisted in Docker volume (`pg_data`).
 
 ---
 
-### **MongoDB**
-
-```bash
-cd mongodb
-nano Dockerfile
-```
-
-Paste:
+## 3️⃣ VerneMQ Dockerfile (`vernemq/Dockerfile`)
 
 ```dockerfile
-FROM mongo:7
+FROM vernemq/vernemq:latest
 
-VOLUME ["/data/db"]
+VOLUME ["/vernemq/data", "/vernemq/etc"]
 
-EXPOSE 27017
-```
+EXPOSE 1883 8080
 
-Save and exit, then back:
-
-```bash
-cd ..
+CMD ["vernemq", "start"]
 ```
 
 ---
 
-### **Spring Boot**
+## 4️⃣ Prepare VerneMQ Config
+
+Create the **etc folder** and add required configs:
 
 ```bash
-cd springboot
-nano Dockerfile
+mkdir -p ~/iot-stack/vernemq/etc
+chmod 777 ~/iot-stack/vernemq/etc
 ```
 
-Paste:
-
-```dockerfile
-FROM eclipse-temurin:17-jdk-alpine
-
-WORKDIR /app
-
-COPY target/*.jar app.jar
-
-EXPOSE 8080
-
-ENTRYPOINT ["java", "-jar", "app.jar"]
-```
-
-Save and exit, then back:
+### `vernemq.conf`
 
 ```bash
-cd ..
+echo "accept_eula = yes" > ~/iot-stack/vernemq/etc/vernemq.conf
+```
+
+### `vm.args`
+
+```bash
+cat <<EOL > ~/iot-stack/vernemq/etc/vm.args
+-name vernemq@127.0.0.1
+-setcookie secretcookie
+EOL
 ```
 
 ---
 
-### **Vite App**
-
-```bash
-cd vite-app
-nano Dockerfile
-```
-
-Paste:
-
-```dockerfile
-FROM node:20-alpine
-
-WORKDIR /app
-
-COPY package*.json ./
-RUN npm install
-
-COPY . .
-
-EXPOSE 5173
-
-CMD ["npm", "run", "dev"]
-```
-
-Save and exit, then back:
-
-```bash
-cd ..
-```
-
----
-
-## 3️⃣ Create Docker volumes
-
-```bash
-docker volume create vernemq_data
-docker volume create pg_data
-docker volume create mongo_data
-```
-
----
-
-## 4️⃣ Create Docker network
-
-```bash
-docker network create iot-net
-```
-
----
-
-## 5️⃣ Create `docker-compose.yml` in `/home/deploy/iot-stack`
-
-```bash
-nano docker-compose.yml
-```
-
-Paste:
+## 5️⃣ Docker Compose (`docker-compose.yml`)
 
 ```yaml
-version: "3.9"
 services:
-  vernemq:
-    build: ./vernemq
-    ports:
-      - "1883:1883"
-      - "8080:8080"
-    volumes:
-      - vernemq_data:/vernemq/data
-      - ./vernemq/config:/vernemq/etc
-    networks:
-      - iot-net
-
   postgresql:
     build: ./postgresql
+    container_name: postgresql
     ports:
       - "5432:5432"
     volumes:
@@ -235,103 +102,92 @@ services:
     networks:
       - iot-net
 
-  mongodb:
-    build: ./mongodb
+  vernemq:
+    build: ./vernemq
+    container_name: vernemq
     ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
-    networks:
-      - iot-net
-
-  springboot:
-    build: ./springboot
-    ports:
+      - "1883:1883"
       - "8080:8080"
-    depends_on:
-      - vernemq
-      - postgresql
-      - mongodb
-    networks:
-      - iot-net
-
-  vite:
-    build: ./vite-app
-    ports:
-      - "5173:5173"
-    depends_on:
-      - springboot
+    environment:
+      DOCKER_VERNEMQ_ACCEPT_EULA: "yes"
+      VERNEMQ_LISTENER__TCP__DEFAULT: "0.0.0.0:1883"
+      VERNEMQ_ALLOW_ANONYMOUS: "off"
+      VERNEMQ_PLUGINS__VMQ_PASSWD: "on"
+    volumes:
+      - vernemq_data:/vernemq/data
+      - vernemq_etc:/vernemq/etc
     networks:
       - iot-net
 
 volumes:
-  vernemq_data:
   pg_data:
-  mongo_data:
+  vernemq_data:
+  vernemq_etc:
 
 networks:
   iot-net:
     external: true
 ```
 
-Save and exit.
-
 ---
 
-## 6️⃣ Build and run the stack
+## 6️⃣ Build and Start Containers
 
 ```bash
-docker compose up -d --build
-```
+# Stop and remove old containers/volumes
+docker compose down -v
 
-* `-d` → run in detached mode
-* `--build` → force rebuild images
+# Build images
+docker compose build
+
+# Start stack
+docker compose up -d
+```
 
 ---
 
-## 7️⃣ Verify running containers
+## 7️⃣ Verify
+
+Check running containers:
 
 ```bash
 docker ps
 ```
 
-You should see all 5 services up:
-
-* VerneMQ → 1883 / 8080
-* PostgreSQL → 5432
-* MongoDB → 27017
-* Spring Boot → 8080
-* Vite → 5173
-
----
-
----
-
-### **Option 1: Remove existing Dockerfile and clone**
+Check VerneMQ logs:
 
 ```bash
-rm Dockerfile
-git clone https://github.com/AstravalSmart/iotroot.git .
+docker logs -f vernemq
 ```
 
-> ✅ This will bring all repo files including Dockerfile if it exists in repo.
+Test MQTT connection (port `1883`) or VerneMQ Web Admin (port `8080`).
 
 ---
 
-### **Option 2: Clone into a temporary folder, then merge**
+## ✅ Key Notes
 
-```bash
-cd /home/deploy/iot-stack
-git clone https://github.com/AstravalSmart/iotroot.git springboot_tmp
-cp -r springboot_tmp/* springboot/
-rm -rf springboot_tmp
-```
+1. **Volumes**:
 
-> Use this if you want to **keep your current Dockerfile** and merge manually.
+   * `pg_data` → PostgreSQL persistent storage
+   * `vernemq_data` → VerneMQ persistent messages
+   * `vernemq_etc` → VerneMQ config files
+
+2. **Important config**:
+
+   * `accept_eula = yes` in `vernemq.conf`
+   * `-name` in `vm.args` for proper node startup
+   * `-setcookie` for cluster authentication
+
+3. **Common issues**:
+
+   * Empty `/vernemq/etc` → container fails
+   * Missing `vm.args` → `-name` error
+   * License not accepted → container stops
 
 ---
 
-Since you already have a Dockerfile in the folder, **Option 2 is safer**.
+This is now a **ready-to-use Docker setup** for your IoT platform with PostgreSQL + VerneMQ.
 
-Do you want me to give the **final Dockerfile for Spring Boot** after cloning?
+---
 
+If you want, I can also make a **compact “copy-paste” script** that sets up everything from scratch on a new VPS. This avoids repeated manual steps. Do you want me to do that?
