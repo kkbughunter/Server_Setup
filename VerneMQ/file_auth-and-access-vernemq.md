@@ -1,18 +1,18 @@
 # Use defaut VerneMQ `File Auth`
 ### move to bin file dir
 ```bash
-cd ~/vernemq/_build/default/rel/vernemq/bin
-```
+cd /opt/vernemq/bin
+``` 
 
 ### Create new user by creating a file 
 ```bash
-./vmq-passwd -c /root/vernemq/_build/default/rel/vernemq/etc/vmq.passwd user1
+./vmq-passwd -c /opt/vernemq/etc/vmq.passwd user1
 ```
 
 ### Verify File Permissions
 ```bash
-chown vernemq:vernemq  /root/vernemq/_build/default/rel/vernemq/etc/vmq.passwd
-chown 600 /root/vernemq/_build/default/rel/vernemq/etc/vmq.passwd
+chown vernemq:vernemq /opt/vernemq/etc/vmq.passwd
+chown 600 /opt/vernemq/etc/vmq.passwd
 ```
 
 ### Update config file `~/vernemq/_build/default/rel/vernemq/etc/vernemq.conf`
