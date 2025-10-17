@@ -9,6 +9,7 @@ cd vernemq
 2. Ensure you have Erlang/OTP (versions 25-27), a C compiler, and libsnappy-dev installed on your system. On Debian/Ubuntu, you can install dependencies like:
 ```
 sudo apt-get install erlang build-essential libsnappy-dev
+cd vernemq
 ```
 
 3. Build the VerneMQ release from the source code:
