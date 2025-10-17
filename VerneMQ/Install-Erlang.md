@@ -10,13 +10,13 @@ sudo apt-get install -y build-essential libssl-dev libncurses5-dev libwxgtk3.0-d
 
 ### 2. Download the Erlang source tarball
 ```bash
-wget https://github.com/erlang/otp/releases/download/OTP-28.0/otp_src_28.0.tar.gz
+wget https://github.com/erlang/otp/releases/download/OTP-27.3.4.3/otp_src_27.3.4.3.tar.gz
 ```
 
 ### 3. Extract the tarball
 ```bash
-tar -xvzf otp_src_28.0.tar.gz
-cd otp_src_28.0
+tar -xvzf otp_src_27.3.4.3.tar.gz
+cd otp_src_27.3.4.3/
 ```
 - Make sure you have install `java21+`
 ### 4. Configure the build
@@ -29,6 +29,8 @@ You can add options to `./configure` if you need specific features.
 ```bash
 make -j$(nproc)
 ```
+<img width="1332" height="106" alt="image" src="https://github.com/user-attachments/assets/8d9d63cc-dde8-408f-8540-367f098fe33c" />
+
 This uses all CPU cores for faster compilation.
 - This step thak `5min to 15min` based on your system config
 ### 6. Install Erlang
