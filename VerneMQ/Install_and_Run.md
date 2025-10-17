@@ -16,10 +16,12 @@ cd vernemq
 ```
 make rel
 ```
+Note that the $VERNEMQ/_build/default/rel/vernemq directory is a complete, self-contained instance of VerneMQ and Erlang. It is strongly suggested that you move this directory outside the source tree if you plan to run a production instance.
 
 4. Once built, start VerneMQ by running:
 ```
-cd _build/default/rel/vernemq
+sudo mv _build/default/rel/vernemq /opt/vernemq
+cd /opt/vernemq
 bin/vernemq start
 ```
 
