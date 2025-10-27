@@ -1,5 +1,4 @@
 # Installing PostgreSQL
-- Version 13
 Ubuntu’s default repositories contain Postgres packages, so you can install these using the apt packaging system.
 
 If you’ve not done so recently, refresh your server’s local package index:
@@ -16,3 +15,8 @@ Ensure that the server is running using the systemctl start command:
 sudo systemctl start postgresql.service
 ```
 <img width="854" height="254" alt="image" src="https://github.com/user-attachments/assets/f3f257d8-71f1-4783-944b-ece2fa7e180b" />
+
+To enable PostgreSQL to automatically start when the system boots, use the following command:
+```bash
+sudo systemctl enable postgresql.service
+```
