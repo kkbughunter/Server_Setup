@@ -4,7 +4,7 @@ backend -> application.yml
     # url: jdbc:mysql://192.168.1.37:3306/onboarding
     url: jdbc:mysql://localhost:3306/onboarding
     username: root
-    password: ydeOVPMr1x6k
+    password: password
     driver-class-name: com.mysql.cj.jdbc.Driver
 	
 backend -> application.yml
