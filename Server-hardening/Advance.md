@@ -88,26 +88,10 @@ bantime = 3600
 sudo systemctl restart fail2ban
 ```
 
-
-These commands will help you update, secure, and protect your Ubuntu 24.04 server effectively.[1][2][3][4]
-
-[1](https://jumpcloud.com/blog/how-to-upgrade-ubuntu-22-04-to-ubuntu-24-04)
-[2](https://dev.to/salamilinux/securing-ssh-disable-root-login-change-port-use-key-based-access-34eh)
-[3](https://www.howtoforge.com/how-to-install-fail2ban-on-ubuntu-24-04-server/)
-[4](https://linuxconfig.org/setting-the-root-password-on-ubuntu-24-04-linux)
-[5](https://ubuntu.com/tutorials/upgrading-ubuntu-desktop)
-[6](https://documentation.ubuntu.com/server/how-to/software/upgrade-your-release/)
-[7](https://www.youtube.com/watch?v=IISYAkWSM1k)
-[8](https://www.youtube.com/watch?v=ULeBDYl6uJM)
-[9](https://www.server-world.info/en/note?os=Ubuntu_24.04&p=initial_conf&f=2)
-[10](https://linuxconfig.org/ubuntu-upgrade-to-24-04-noble-numbat-a-step-by-step-howto-guide)
-[11](https://simplealltech.com/how-to-change-the-sshd-port-and-enable-password-authentication-on-ubuntu-24-04/)
-[12](https://www.tecmint.com/install-fail2ban-ubuntu-24-04/)
-[13](https://www.reddit.com/r/Ubuntu/comments/1clfbo2/how_do_i_force_upgrade_from_ubuntu_2204_to_2404/)
-[14](https://phoenixnap.com/kb/change-root-password-ubuntu)
-[15](https://www.youtube.com/watch?v=8ugcUTNoGj4)
-[16](https://linuxcapable.com/how-to-install-fail2ban-on-ubuntu-linux/)
-[17](https://www.cherryservers.com/blog/upgrade-ubuntu-2404-ubuntu-2504)
-[18](https://www.digitalocean.com/community/tutorials/how-to-create-a-new-sudo-enabled-user-on-ubuntu)
-[19](https://infotechys.com/harden-ssh-ubuntu-24-04/)
-[20](https://help.ubuntu.com/community/Fail2ban)
+#### 6 Ram Protection 
+```bash
+sudo fallocate -l 2G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+```
