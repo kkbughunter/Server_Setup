@@ -86,7 +86,7 @@ cd my-bench
 ## 7. Create New Site
 
 ```bash
-bench new-site hrms.devnadal.in.net \
+bench new-site hrms.your_site.in.net \
   --db-root-username root \
   --db-root-password root123 \
   --admin-password admin
@@ -97,8 +97,8 @@ bench new-site hrms.devnadal.in.net \
 ## 8. Enable Scheduler and Set Default Site
 
 ```bash
-bench --site hrms.devnadal.in.net enable-scheduler
-bench use hrms.devnadal.in.net
+bench --site hrms.your_site.in.net enable-scheduler
+bench use hrms.your_site.in.net
 ```
 
 ---
@@ -268,8 +268,8 @@ If CSS is not loading:
 bench get-app erpnext https://github.com/frappe/erpnext.git --branch version-16
 bench get-app hrms https://github.com/frappe/hrms.git --branch version-16
 
-bench --site hrms.devnadal.in.net install-app erpnext
-bench --site hrms.devnadal.in.net install-app hrms
+bench --site hrms.your_site.in.net install-app erpnext
+bench --site hrms.your_site.in.net install-app hrms
 
 ```
 
@@ -277,7 +277,7 @@ bench --site hrms.devnadal.in.net install-app hrms
 
 ## Final Notes
 
-* Default site: `hrms.devnadal.in.net`
+* Default site: `hrms.your_site.in.net`
 * Admin password: `admin`
 * Database root password: `root123`
 * MariaDB secure password: configured earlier
@@ -314,7 +314,7 @@ bench --site hrms.devnadal.in.net install-app hrms
 Your Frappe/ERPNext (HRMS) instance should now be accessible via:
 
 ```
-http://hrms.devnadal.in.net
+http://hrms.your_site.in.net
 ```
 
 ---
