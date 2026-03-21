@@ -263,6 +263,16 @@ If CSS is not loading:
   ```
 * Reload nginx
 
+## Install other apps:
+```bash
+bench get-app erpnext https://github.com/frappe/erpnext.git --branch version-16
+bench get-app hrms https://github.com/frappe/hrms.git --branch version-16
+
+bench --site hrms.devnadal.in.net install-app erpnext
+bench --site hrms.devnadal.in.net install-app hrms
+
+```
+
 ---
 
 ## Final Notes
