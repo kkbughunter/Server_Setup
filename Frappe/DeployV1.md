@@ -34,7 +34,7 @@ sudo mariadb-secure-installation
 Set root password:
 
 ```
-vgYVdB0r2OFN133uSv9G8u1Sk
+your_password
 ```
 
 ---
