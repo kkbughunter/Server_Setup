@@ -147,15 +147,27 @@ sudo nano /etc/apache2/conf-available/phpmyadmin.conf
 Add inside `<Directory /usr/share/phpmyadmin>`:
 
 ```apache
-AuthType Basic
-AuthName "Restricted Access"
-AuthUserFile /etc/phpmyadmin/.htpasswd
-Require valid-user
+Alias /phpmyadmin /usr/share/phpmyadmin
+
+<Directory /usr/share/phpmyadmin>
+    Options SymLinksIfOwnerMatch
+    DirectoryIndex index.php
+
+    AuthType Basic
+    AuthName "Restricted Access"
+    AuthUserFile /etc/phpmyadmin/.htpasswd
+    Require valid-user
+</Directory>
+
+<Directory /usr/share/phpmyadmin/setup>
+    Require all denied
+</Directory>
 ```
 
 Restart:
 
 ```bash
+sudo a2enconf phpmyadmin
 sudo systemctl restart apache2
 ```
 
@@ -165,6 +177,11 @@ sudo systemctl restart apache2
 
 Login with:
 
+Basic Auth (popup):
+* Username: `admin`
+* Password: `StrongPassword`
+
+Mysql password:
 * Username: `admin`
 * Password: `StrongPassword`
 
