@@ -1,5 +1,5 @@
 
-# 🧱 1. Install MariaDB 10.6
+# 🧱 1. Install MariaDB 
 
 ### Update system
 
