@@ -70,6 +70,7 @@ Edit:
 
 ```
 PasswordAuthentication no
+PubkeyAuthentication yes
 ```
 
 ---
